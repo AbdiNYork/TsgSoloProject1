@@ -28,6 +28,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
         and make some more changes
+        trying out pull request
       </p>
     </>
   )
