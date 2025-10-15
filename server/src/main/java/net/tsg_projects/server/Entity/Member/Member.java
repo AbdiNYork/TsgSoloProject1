@@ -1,8 +1,8 @@
 package net.tsg_projects.server.Entity.Member;
 
-import com.nimbusds.openid.connect.sdk.claims.Address;
 import jakarta.persistence.*;
 import lombok.Data;
+import net.tsg_projects.server.Entity.Address.Address;
 import net.tsg_projects.server.Entity.Enrollment.Enrollment;
 import net.tsg_projects.server.Entity.User.User;
 import org.hibernate.annotations.UuidGenerator;

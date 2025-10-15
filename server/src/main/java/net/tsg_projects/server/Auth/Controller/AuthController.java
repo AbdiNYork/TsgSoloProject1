@@ -6,11 +6,12 @@ import net.tsg_projects.server.Service.AuthService;
 import net.tsg_projects.server.Service.ImplAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @Data
 @RestController
@@ -26,9 +27,9 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public Object getMe(OAuth2AuthenticationToken tk) {
+    public Map<String, Object> getMe(Jwt jwt) {
 //        System.out.println(tk.getPrincipal());
-
-        return authService.InitUserIfNeeded(tk);
+          return jwt.getClaims();
+//        return authService.initUserIfNeeded(jwt);
     }
 }
