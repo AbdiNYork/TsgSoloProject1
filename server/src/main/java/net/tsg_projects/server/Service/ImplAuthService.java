@@ -6,7 +6,6 @@ import net.tsg_projects.server.Entity.Member.Member;
 import net.tsg_projects.server.Entity.User.User;
 import net.tsg_projects.server.Repository.MemberRepository;
 import net.tsg_projects.server.Repository.UserRepository;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +22,17 @@ public class ImplAuthService implements AuthService {
     private final MemberRepository memberRepository;
 
 
-    public UserInfoDto InitUserIfNeeded(OAuth2AuthenticationToken tk) {
+    public UserInfoDto initUserIfNeeded(Jwt jwt) {
         String provider = "google.com";
-        String sub = tk.getPrincipal().getAttributes().get("sub").toString();
-        String email = tk.getPrincipal().getAttributes().get("email").toString();
-        String name = tk.getPrincipal().getAttributes().get("name").toString();
-        String lastName = tk.getPrincipal().getAttributes().get("family_name").toString();
+        String sub = jwt.getSubject();
+        String email = jwt.getClaim("email");
+        String name = jwt.getClaim("name");
+        String lastName = jwt.getClaim("family_name");
 
         // Create / find user
         Optional<User> user = userRepository.findByAuthProviderAndAuthSub(provider, sub);
+
+        User userSaved = new User();
         if(user.isEmpty()) {
             User newUser = new User();
             newUser.setAuthProvider(provider);
@@ -39,19 +40,18 @@ public class ImplAuthService implements AuthService {
             newUser.setEmail(email);
             newUser.setCreatedAt(OffsetDateTime.now());
             newUser.setUpdatedAt(OffsetDateTime.now());
-            userRepository.save(newUser);
+            userSaved = userRepository.save(newUser);
         }
 
         Member member = memberRepository.findByEmail(email);
         if(member == null) {
-            member = CreateMember(user.get().getId(), name, lastName, email);
+            member = CreateMember(userSaved.getId(), name, lastName, email);
         } else {
-            member = LinkMember(member, user.get());
+            member = LinkMember(member, userSaved);
         }
         // in the if block - member comes out linked by also calling LinkMember
         // in the else block - member only links to user and returns member
-        User userSaved = user.get();
-        return new UserInfoDto(member.getEmail(), userSaved.getAuthProvider(), userSaved.getCreatedAt(), userSaved.getId());
+        return new UserInfoDto(userSaved.getEmail(), userSaved.getAuthProvider(), userSaved.getCreatedAt(), userSaved.getId());
 
     }
 
