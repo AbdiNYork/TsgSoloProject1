@@ -27,7 +27,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public Map<String, Object> getMe(Jwt jwt) {
+    public Map<String, Object> getMe(@AuthenticationPrincipal Jwt jwt) {
 //        System.out.println(tk.getPrincipal());
           return jwt.getClaims();
 //        return authService.initUserIfNeeded(jwt);

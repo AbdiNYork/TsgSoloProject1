@@ -1,0 +1,7 @@
+spring:
+  security:
+    oauth2:
+      resource server:
+        jwt:
+          issuer-uri: https://accounts.google.com  # ✅ preferred
+
