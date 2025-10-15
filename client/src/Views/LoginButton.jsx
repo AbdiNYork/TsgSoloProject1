@@ -1,14 +1,12 @@
 import {GoogleLogin} from "@react-oauth/google";
 import axios from "axios"
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
 const LoginButton = () => {
 
-    const [userData, setUserData] = useState([null])
     const navigate = useNavigate()
     const handleSuccess = async (credResponse) => {
         const idToken = credResponse.credential;
-        localStorage.setItem("Token", credResponse)
+        localStorage.setItem("id_token", idToken)
 
         // send to backend
         try {
@@ -17,11 +15,8 @@ const LoginButton = () => {
                     Authorization: `Bearer ${idToken}`,
                 }
             })
-            console.log("User info from backend: ", response.data)
-            setUserData(response.data)
-            setTimeout(() => {
-                navigate('/dashboard')
-            },500)
+            const user = response.data
+            navigate('/dashboard', {state: {user}})
         } catch(error) {
             console.log("Auth failed: ", error)
         }
@@ -37,13 +32,6 @@ const LoginButton = () => {
     return (
         <div>
             <GoogleLogin onSuccess={handleSuccess} onError={handleError} useOneTap />
-            {userData && (
-                <div>
-                    <h1>Welcome {userData.name}</h1>
-                    <p>Email:  {userData.email}</p>
-                    <p></p>
-                </div>
-            )}
         </div>
 
 
