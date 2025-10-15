@@ -1,0 +1,27 @@
+package net.tsg_projects.server.Entity.ClaimStatusEvent;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import net.tsg_projects.server.Entity.Claim.Claim;
+import net.tsg_projects.server.Enums.ClaimStatus;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+@Data
+@Entity
+@Table(name = "claimstatusevent")
+public class ClaimStatusEvent {
+    @Id
+    private UUID Id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "claim_id", nullable = false)
+    private Claim claim;
+
+    @Enumerated(EnumType.STRING)
+    private ClaimStatus status;
+
+    private OffsetDateTime occurredAt;
+    private String note;
+}
