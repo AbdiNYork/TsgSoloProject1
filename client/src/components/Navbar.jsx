@@ -1,24 +1,21 @@
 import {Link, useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {getUserFromToken} from "../utils/auth.jsx";
 
 const Navbar = () => {
+    const [user, setUser] = useState(null)
     const navigate = useNavigate()
     const handleLogout = () => {
         localStorage.removeItem('token')
         navigate('/')
     }
 
-    return (
-        // <header>
-        //     <nav>
-        //
-        //     <Link to='/dashboard'>Dashboard</Link>
-        //     <Link to='/claims'>Claims</Link>
-        //     <Link to='/claimDetail'>Claim details</Link>
-        //     <button onClick={handleLogout}>Logout</button>
-        //
-        //     </nav>
-        //     <h1>Nav</h1>
-        // </header>
+    useEffect(() => {
+        getUserFromToken().then((data) => setUser(data))
+    }, []);
+
+return <>
+
         <div className="w-64 h-screen bg-white border-r shadow-sm flex flex-col justify-between">
             <div className="p-6">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-8">Claimify</h2>
@@ -54,7 +51,8 @@ const Navbar = () => {
                 </button>
             </div>
         </div>
-    )
+    </>
+
 }
 
 export default Navbar

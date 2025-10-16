@@ -6,6 +6,7 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import Dashboard from "./Views/Dashboard.jsx";
 import Claims from "./Views/Claims.jsx";
 import ClaimDetail from "./Views/ClaimDetail.jsx";
+import LandingPage from "./Views/LandingPage.jsx";
 
 
 const App = () => {
@@ -15,7 +16,7 @@ const App = () => {
 
             <Routes>
                 {/* Public login route */}
-                <Route path="/" element={<LoginButton />} />
+                <Route path="/" element={<LandingPage />} />
 
                 {/* Protected routes (require auth + show navbar) */}
                 <Route element={<PrivateRoute />}>
@@ -26,7 +27,7 @@ const App = () => {
                     </Route>
                 </Route>
             </Routes>
-        
+
 
 
 
