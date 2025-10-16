@@ -46,12 +46,12 @@ public class ImplAuthService implements AuthService {
         Member member = memberRepository.findByEmail(email);
         if(member == null) {
             member = CreateMember(userSaved.getId(), name, lastName, email);
-        } else {
+        } else if (!member.getEmail().equals(email)) {
             member = LinkMember(member, userSaved);
         }
         // in the if block - member comes out linked by also calling LinkMember
         // in the else block - member only links to user and returns member
-        return new UserInfoDto(userSaved.getEmail(), userSaved.getAuthProvider(), userSaved.getCreatedAt(), userSaved.getId());
+        return new UserInfoDto(member.getEmail(), member.getFirstName(), member.getLastName());
 
     }
 

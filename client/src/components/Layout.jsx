@@ -4,12 +4,12 @@ import Navbar from "./Navbar.jsx";
 const Layout = () => {
 
     return (
-        <>
+        <div className="flex">
             <Navbar />
-            <main>
+            <main className="flex-1">
                 <Outlet />
             </main>
-        </>
+        </div>
 
 
 

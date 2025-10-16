@@ -10,7 +10,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserInfoDto {
     private String email;
-    private String authProvider;
-    private OffsetDateTime createdDate;
-    private UUID id;
+    private String name;
+    private String lastName;
 }
