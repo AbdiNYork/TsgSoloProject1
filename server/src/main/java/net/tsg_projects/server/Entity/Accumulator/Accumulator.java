@@ -1,6 +1,8 @@
 package net.tsg_projects.server.Entity.Accumulator;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.tsg_projects.server.Entity.Enrollment.Enrollment;
 import net.tsg_projects.server.Enums.AccumulatorType;
 import net.tsg_projects.server.Enums.NetworkTier;
@@ -10,12 +12,17 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "accumulator")
+@Data
+@NoArgsConstructor
 public class Accumulator {
-
     @Id
-    @UuidGenerator
-    private UUID Id;
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
+    private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "enrollment_id")
+    private Enrollment enrollment;
+
 
     @Enumerated(EnumType.STRING)
     private AccumulatorType type;
@@ -25,8 +32,5 @@ public class Accumulator {
 
     private BigDecimal limitAmount;
     private BigDecimal usedAmount;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "enrollment_id", nullable = false)
-    private Enrollment enrollment;
 }
+

@@ -1,5 +1,7 @@
 package net.tsg_projects.server.Entity.Member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import net.tsg_projects.server.Entity.Address.Address;
@@ -8,6 +10,7 @@ import net.tsg_projects.server.Entity.User.User;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +39,8 @@ public class Member {
     private Address mailingAddress; // optional embedded/owned
 
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Enrollment> enrollments; // one active for current plan year
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Enrollment> enrollments = new ArrayList<>();
+
 }

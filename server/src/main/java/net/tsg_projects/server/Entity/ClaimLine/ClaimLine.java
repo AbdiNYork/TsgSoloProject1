@@ -3,16 +3,19 @@ package net.tsg_projects.server.Entity.ClaimLine;
 import jakarta.persistence.*;
 import lombok.Data;
 import net.tsg_projects.server.Entity.Claim.Claim;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
 @Entity
+
 @Table(name = "claimline")
 public class ClaimLine {
     @Id
-    private UUID id;
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
+    private UUID Id;
 
     // Fk to parent Claim
     @ManyToOne(fetch = FetchType.LAZY)

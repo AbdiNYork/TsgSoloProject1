@@ -7,6 +7,7 @@ import net.tsg_projects.server.Entity.ClaimStatusEvent.ClaimStatusEvent;
 import net.tsg_projects.server.Entity.Member.Member;
 import net.tsg_projects.server.Entity.Provider.Provider;
 import net.tsg_projects.server.Enums.ClaimStatus;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,7 +20,8 @@ import java.util.UUID;
 public class Claim {
 
     @Id
-    private UUID id;
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
+    private UUID Id;
 
     private String claimNumber;
 

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import net.tsg_projects.server.Entity.Claim.Claim;
 import net.tsg_projects.server.Enums.ClaimStatus;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Table(name = "claimstatusevent")
 public class ClaimStatusEvent {
     @Id
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     private UUID Id;
 
     @ManyToOne(fetch = FetchType.LAZY)
