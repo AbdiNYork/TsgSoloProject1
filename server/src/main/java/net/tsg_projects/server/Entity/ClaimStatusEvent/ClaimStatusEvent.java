@@ -1,5 +1,6 @@
 package net.tsg_projects.server.Entity.ClaimStatusEvent;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import net.tsg_projects.server.Entity.Claim.Claim;
@@ -19,6 +20,7 @@ public class ClaimStatusEvent {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "claim_id", nullable = false)
+    @JsonBackReference
     private Claim claim;
 
     @Enumerated(EnumType.STRING)

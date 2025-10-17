@@ -2,6 +2,7 @@ package net.tsg_projects.server.Controller;
 
 
 import lombok.Data;
+import net.tsg_projects.server.Dto.MemberDto;
 import net.tsg_projects.server.Entity.Member.Member;
 import net.tsg_projects.server.MockDataFactory.MockDataFactory;
 import net.tsg_projects.server.Repository.MemberRepository;
@@ -30,10 +31,10 @@ public class Dashboard {
     MockDataFactory mockDataFactory;
 
     @GetMapping("")
-    public Member getDashBoard(@AuthenticationPrincipal Jwt jwt) {
+    public MemberDto getDashBoard(@AuthenticationPrincipal Jwt jwt) {
         String email = jwt.getClaim("email");
         String name = jwt.getClaim("name");
-        Member memberData = mockDataFactory.generate(email);
+        MemberDto memberData = mockDataFactory.generate(email);
 
 
         return memberData;

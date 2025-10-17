@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "table")
+@Table(name = "provider")
 public class Provider {
     @Id
     @UuidGenerator(style = UuidGenerator.Style.TIME)

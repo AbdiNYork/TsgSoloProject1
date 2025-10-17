@@ -1,5 +1,8 @@
 package net.tsg_projects.server.MockDataFactory;
 
+import net.tsg_projects.server.Dto.ClaimDto;
+import net.tsg_projects.server.Dto.EnrollmentDto;
+import net.tsg_projects.server.Dto.MemberDto;
 import net.tsg_projects.server.Entity.Accumulator.Accumulator;
 import net.tsg_projects.server.Entity.Address.Address;
 import net.tsg_projects.server.Entity.Claim.Claim;
@@ -21,6 +24,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MockDataFactory {
@@ -65,38 +70,47 @@ public class MockDataFactory {
             claim.setTotalMemberResponsibility(new BigDecimal(50));
             claim.setTotalPlanPaid(new BigDecimal(100));
 
+            // Initialize collections if not already done in constructor
+
+
+            // Add a claim status event
             ClaimStatusEvent claimStatusEvent = new ClaimStatusEvent();
             claimStatusEvent.setOccurredAt(OffsetDateTime.now());
             claimStatusEvent.setStatus(ClaimStatus.IN_REVIEW);
             claimStatusEvent.setNote("Claim Status: " + ClaimStatus.IN_REVIEW);
+            claimStatusEvent.setClaim(claim); // make sure the back-reference is set
 
             claim.getStatusHistory().add(claimStatusEvent);
+
+            // Create lines and associate them
             createClaimLine(claim);
 
+            // Save only once after everything is set
             claimRepository.save(claim);
         }
     }
+
 
     public void createClaimLine(Claim claim) {
         for (int i = 0; i < 3; i++) {
             ClaimLine claimLine = new ClaimLine();
             claimLine.setAllowedAmount(claim.getTotalAllowed());
             claimLine.setBilledAmount(claim.getTotalBilled());
-            claimLine.setCoinsuranceApplied(new BigDecimal(25));
+            claimLine.setCoinsuranceApplied(BigDecimal.valueOf(50));
             claimLine.setPlanPaid(new BigDecimal(100));
-            claimLine.setMemberResponsibility(new BigDecimal(50));
-            claimLine.setDeductibleApplied(new BigDecimal(50));
-            claimLine.setCopayApplied(new BigDecimal(50));
+            claimLine.setMemberResponsibility(BigDecimal.valueOf(50));
+            claimLine.setDeductibleApplied(BigDecimal.valueOf(50));
+            claimLine.setCopayApplied(BigDecimal.valueOf(50));
             claimLine.setLineNumber(i + 1);
-            claimLine.setCptCode("C-0" + (1 + i * i * i) + ".med");
+            claimLine.setCptCode("#C-10" + (1 + i * 78));
             claimLine.setDescription("Hospital Visit: " + (i + 1));
-            claimLine.setClaim(claim);
-            claimLineRepository.save(claimLine);
+            claimLine.setClaim(claim); // set owning side
+
+            // Add to claim
             claim.getLines().add(claimLine);
         }
-
-        claimRepository.save(claim); // Save once after all lines are added
     }
+
 
     public Accumulator createAccumulator(Enrollment enrollment) {
 //        Accumulator accumulator = new Accumulator();
@@ -110,8 +124,8 @@ public class MockDataFactory {
         Accumulator accumulator2 = new Accumulator();
         accumulator2.setType(AccumulatorType.OOP_MAX);
         accumulator2.setTier(NetworkTier.OUT_OF_NETWORK);
-        accumulator2.setLimitAmount(new BigDecimal(2500));
-        accumulator2.setUsedAmount(new BigDecimal(1200));
+        accumulator2.setLimitAmount(BigDecimal.valueOf(80));
+        accumulator2.setUsedAmount(BigDecimal.valueOf(1200));
         accumulator2.setEnrollment(enrollment);
         accumulatorRepository.save(accumulator2);
 
@@ -121,6 +135,7 @@ public class MockDataFactory {
     public Enrollment createEnrollment(Member member) {
         Enrollment enrollment = new Enrollment();
         enrollment.setMember(member);
+        member.getEnrollments().add(enrollment);
         Plan plan = planRepository.findByName("Gold PPO");
 
         if (plan == null) {
@@ -128,16 +143,17 @@ public class MockDataFactory {
         }
 
         enrollment.setPlan(plan);
-        enrollment.setCoverageStart(LocalDate.now());
-        enrollment.setCoverageEnd(LocalDate.now().plusDays(364));
+        enrollment.setCoverageStart(LocalDate.of(2025, 1,12 ));
+        enrollment.setCoverageEnd(LocalDate.of(2025, 12,12 ));
         enrollment.setActive(true);
         enrollmentRepository.save(enrollment);
+        memberRepository.save(member);
 
-        Accumulator accumulator = createAccumulator(enrollment);
-        enrollment.getAccumulators().add(accumulator);
+//        Accumulator accumulator = createAccumulator(enrollment);
+//        enrollment.getAccumulators().add(accumulator);
 
-        enrollmentRepository.save(enrollment);
-        accumulatorRepository.save(accumulator); // Persist both sides
+//        enrollmentRepository.save(enrollment);
+//        accumulatorRepository.save(accumulator); // Persist both sides
 
         return enrollment;
     }
@@ -174,25 +190,66 @@ public class MockDataFactory {
         return plan;
     }
 
-    public Member generate(String email) {
+    public MemberDto generate(String email) {
         Member member = memberRepository.findByEmail(email);
 
         if (member == null) {
             throw new IllegalArgumentException("Member not found with email: " + email);
         }
 
-        boolean hasActiveEnrollment = enrollmentRepository.existsByMemberIdAndActiveTrue(member.getId());
-        if (hasActiveEnrollment) {
-            return member;
+        boolean ActiveEnrollment = !member.getEnrollments().isEmpty();
+        if (ActiveEnrollment) {
+            EnrollmentDto enrollmentDto = toDto(member.getEnrollments().get(0));
+            return toMemberDto(enrollmentDto, member);
         }
 
         System.out.println("No active enrollment — seeding mock data...");
         createPlan();
         Enrollment enrollment = createEnrollment(member);
-        createAccumulator(enrollment);
+        Accumulator acc = createAccumulator(enrollment);
+        enrollment.setAccumulators(acc);
+        enrollmentRepository.save(enrollment);
         Provider provider = createProvider();
         createClaim(member, provider);
 
-        return member;
+        EnrollmentDto enrollmentDto = toDto(enrollment);
+
+
+
+        return toMemberDto(enrollmentDto, member);
+    }
+
+    public EnrollmentDto toDto(Enrollment enrollment) {
+        EnrollmentDto enrollmentDto = new EnrollmentDto();
+        enrollmentDto.setActive(enrollment.isActive());
+        enrollmentDto.setCoverageStart(enrollment.getCoverageStart());
+        enrollmentDto.setCoverageEnd(enrollment.getCoverageEnd());
+        enrollmentDto.setPlanName(enrollment.getPlan().getName());
+        enrollmentDto.setMemberId(enrollment.getMember().getId());
+
+        return enrollmentDto;
+    }
+
+    public MemberDto toMemberDto(EnrollmentDto enrollmentDto, Member member) {
+        MemberDto memberDto = new MemberDto();
+        memberDto.setEnrollment(enrollmentDto);
+        memberDto.setEmail(member.getEmail());
+        List<Claim> claims = claimRepository.getClaimsByMemberId(member.getId());
+        List<ClaimDto> claimDtos = new ArrayList<>();
+        claims.forEach(claim -> {
+            ClaimDto claimDto = new ClaimDto();
+            claimDto.setProviderName(claim.getProvider().getName());
+            claimDto.setReceivedDate(claim.getReceivedDate());
+            claimDto.setStatus(claim.getStatus().toString());
+            claimDto.setServiceEndDate(claim.getServiceEndDate());
+            claimDto.setServiceStartDate(claim.getServiceStartDate());
+            claimDto.setTotalAllowed(claim.getTotalAllowed());
+            claimDto.setTotalBilled(claim.getTotalBilled());
+            claimDto.setTotalMemberResponsibility(claim.getTotalMemberResponsibility());
+            claimDto.setTotalPlanPaid(claim.getTotalPlanPaid());
+            claimDtos.add(claimDto);
+        });
+        memberDto.setClaims(claimDtos);
+        return memberDto;
     }
 }

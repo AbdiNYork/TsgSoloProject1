@@ -1,5 +1,6 @@
 package net.tsg_projects.server.Entity.Claim;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import net.tsg_projects.server.Entity.ClaimLine.ClaimLine;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,11 +48,21 @@ public class Claim {
     private BigDecimal totalMemberResponsibility;
 
     @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ClaimLine> lines;
+    @JsonManagedReference
+    private List<ClaimLine> lines = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ClaimStatusEvent> statusHistory;
+    @JsonManagedReference
+    private List<ClaimStatusEvent> statusHistory = new ArrayList<>();
+
+    public void setStatusHistory(ClaimStatusEvent status){
+        this.statusHistory.add(status);
+    }
+
+    public void setLines(ClaimLine line) {
+        this.lines.add(line);
+    }
 
 
 

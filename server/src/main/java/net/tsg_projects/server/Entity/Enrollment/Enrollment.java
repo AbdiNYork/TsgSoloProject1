@@ -39,8 +39,7 @@ public class Enrollment {
     @OneToMany(mappedBy = "enrollment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Accumulator> accumulators = new ArrayList<>();
 
-
-
-
-
+    public void setAccumulators(Accumulator accumulator) {
+        this.accumulators.add(accumulator);
+    }
 }

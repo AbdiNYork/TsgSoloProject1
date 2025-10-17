@@ -40,7 +40,7 @@ public class Member {
 
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @JsonManagedReference
     private List<Enrollment> enrollments = new ArrayList<>();
 
 }

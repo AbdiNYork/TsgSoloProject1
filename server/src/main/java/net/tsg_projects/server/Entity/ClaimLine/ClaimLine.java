@@ -1,5 +1,6 @@
 package net.tsg_projects.server.Entity.ClaimLine;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import net.tsg_projects.server.Entity.Claim.Claim;
@@ -20,6 +21,7 @@ public class ClaimLine {
     // Fk to parent Claim
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "claim_id", nullable = false)
+    @JsonBackReference
     private Claim claim;
 
     private Integer lineNumber;
