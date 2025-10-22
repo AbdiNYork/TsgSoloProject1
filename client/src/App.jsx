@@ -23,7 +23,7 @@ const App = () => {
                     <Route element={<Layout />}>
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/claims" element={<Claims />} />
-                        <Route path="/claimDetail" element={<ClaimDetail />} />
+                        <Route path="/claims/:id" element={<ClaimDetail />} />
                     </Route>
                 </Route>
             </Routes>

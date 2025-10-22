@@ -8,6 +8,8 @@ import net.tsg_projects.server.Enums.ClaimStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -18,6 +20,7 @@ public class ClaimDto {
     private LocalDate serviceEndDate;
     private LocalDate receivedDate;
     private String status;
+    private List<ClaimLineDto> claimLines = new ArrayList<>();
 
     private BigDecimal totalBilled;
     private BigDecimal totalAllowed;
