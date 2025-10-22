@@ -13,6 +13,7 @@ import java.util.UUID;
 @Data
 public class ClaimDto {
     private String providerName;
+    private String claimNumber;
     private LocalDate serviceStartDate;
     private LocalDate serviceEndDate;
     private LocalDate receivedDate;

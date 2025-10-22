@@ -1,9 +1,11 @@
 package net.tsg_projects.server.Service;
 
 import lombok.Data;
+import net.tsg_projects.server.Dto.MemberDto;
 import net.tsg_projects.server.Dto.UserInfoDto;
 import net.tsg_projects.server.Entity.Member.Member;
 import net.tsg_projects.server.Entity.User.User;
+import net.tsg_projects.server.MockDataFactory.MockDataFactory;
 import net.tsg_projects.server.Repository.MemberRepository;
 import net.tsg_projects.server.Repository.UserRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -20,9 +22,10 @@ public class ImplAuthService implements AuthService {
 
     private final UserRepository userRepository;
     private final MemberRepository memberRepository;
+    private final MockDataFactory mockDataFactory;
 
 
-    public UserInfoDto initUserIfNeeded(Jwt jwt) {
+    public MemberDto initUserIfNeeded(Jwt jwt) {
         String provider = "google.com";
         String sub = jwt.getSubject();
         String email = jwt.getClaim("email");
@@ -49,9 +52,14 @@ public class ImplAuthService implements AuthService {
         } else if (!member.getEmail().equals(email)) {
             member = LinkMember(member, userSaved);
         }
+        if(!member.getEnrollments().isEmpty()) {
+            return(new MemberDto());
+        }
         // in the if block - member comes out linked by also calling LinkMember
         // in the else block - member only links to user and returns member
-        return new UserInfoDto(member.getEmail(), member.getFirstName(), member.getLastName());
+
+       return mockDataFactory.generate(email);
+
 
     }
 

@@ -1,6 +1,7 @@
 package net.tsg_projects.server.Auth.Controller;
 
 import lombok.Data;
+import net.tsg_projects.server.Dto.MemberDto;
 import net.tsg_projects.server.Dto.UserInfoDto;
 import net.tsg_projects.server.Service.AuthService;
 import net.tsg_projects.server.Service.ImplAuthService;
@@ -28,10 +29,11 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public UserInfoDto getMe(@AuthenticationPrincipal Jwt jwt) {
+    public MemberDto getMe(@AuthenticationPrincipal Jwt jwt) {
 //        System.out.println(tk.getPrincipal());
           //return jwt.getClaims();
-         return authService.initUserIfNeeded(jwt);
+        String email = jwt.getClaim("email");
+        return authService.initUserIfNeeded(jwt);
     }
 
 

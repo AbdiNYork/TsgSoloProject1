@@ -1,0 +1,24 @@
+
+const ClaimsCard  = ({claims}) => {
+   return <div className="bg-white p-5 rounded shadow flex flex-col justify-between">
+        <div>
+            <h3 className="text-lg font-semibold mb-3">Recent Claims</h3>
+            <ul className="space-y-2 text-gray-700">
+                {claims.slice(0, 5).map(c => (
+                    <li key={c.claimNumber} className="flex justify-between border-b pb-1">
+                        <span>#{c.claimNumber} {c.status}</span>
+                        <span>${c.totalMemberResponsibility || '—'}</span>
+                    </li>
+                ))}
+            </ul>
+        </div>
+
+        <div className="mt-4">
+            <button className="text-sm text-blue-600 hover:underline">
+                View All Claims
+            </button>
+        </div>
+    </div>
+
+}
+export default ClaimsCard
