@@ -33,6 +33,7 @@ public class AuthController {
 //        System.out.println(tk.getPrincipal());
           //return jwt.getClaims();
         String email = jwt.getClaim("email");
+        System.out.println(jwt);
         return authService.initUserIfNeeded(jwt);
     }
 

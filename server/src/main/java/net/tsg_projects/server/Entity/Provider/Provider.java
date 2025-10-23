@@ -16,6 +16,7 @@ public class Provider {
     @Id
     @UuidGenerator(style = UuidGenerator.Style.TIME)
     private UUID Id;
+
     private String name;
     private String specialty;
 

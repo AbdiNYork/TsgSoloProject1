@@ -23,7 +23,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwt -> {}) // ✅ No deprecation warning
+                        oauth2.jwt(jwt -> {}) //
                 );
 
         return http.build();
