@@ -30,7 +30,7 @@ const ClaimDetail = () => {
             <div className="flex flex-col gap-2">
                 <div>Status: <span className="font-medium">{claim.status}</span></div>
                 <div className="flex items-center space-x-2 text-xs text-gray-500">
-                    {["SUBMITTED", "IN_REVIEW", "PROCESSED", "PAID"].map((step, i) => (
+                    {["SUBMITTED", "IN_REVIEW", "PROCESSED", "PAID", "DENIED"].map((step, i) => (
                         <div key={step} className="flex items-center space-x-1">
               <span className={`px-2 py-0.5 rounded-full border ${claim.status === step ? 'bg-blue-500 text-white' : ''}`}>
                 {step.replace("_", " ")}
@@ -94,9 +94,6 @@ const ClaimDetail = () => {
                     className="text-blue-600 underline hover:text-blue-800"
                 >
                     ← Back to Claims
-                </button>
-                <button className="bg-blue-600 text-white px-4 py-1.5 rounded hover:bg-blue-700">
-                    Download EOB PDF
                 </button>
             </div>
         </div>

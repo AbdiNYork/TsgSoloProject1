@@ -23,9 +23,11 @@ const ClaimsCard  = ({claims}) => {
         </div>
 
         <div className="mt-4">
+            <Link to={"/claims"}>
             <button className="text-sm text-blue-600 hover:underline">
                 View All Claims
             </button>
+            </Link>
         </div>
     </div>
 

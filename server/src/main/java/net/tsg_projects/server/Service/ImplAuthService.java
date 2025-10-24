@@ -53,7 +53,10 @@ public class ImplAuthService implements AuthService {
             member = LinkMember(member, userSaved);
         }
         if(!member.getEnrollments().isEmpty()) {
-            return(new MemberDto());
+            MemberDto memberDto = new MemberDto();
+            memberDto.setEmail(email);
+            memberDto.setName(member.getFirstName());
+            return memberDto;
         }
         // in the if block - member comes out linked by also calling LinkMember
         // in the else block - member only links to user and returns member

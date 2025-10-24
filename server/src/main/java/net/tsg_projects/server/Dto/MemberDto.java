@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class MemberDto {
     private String email;
+    private String name;
 //    private EnrollmentDto enrollment;
 //    private List<ClaimDto> claims;
     // no lazy proxies!

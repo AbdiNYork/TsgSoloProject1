@@ -19,7 +19,7 @@ export default function Claims() {
     const [loading, setLoading] = useState(false);
 
     // Status options
-    const statusOptions = ["PAID", "IN_REVIEW", "PROCESSED"];
+    const statusOptions = ["PAID", "IN_REVIEW", "PROCESSED", "DENIED"];
 
     const fetchClaims = async () => {
         setLoading(true);

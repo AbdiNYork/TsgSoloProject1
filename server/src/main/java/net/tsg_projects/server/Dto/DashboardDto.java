@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class DashboardDto {
     private String name;
+    private String email;
     private PlanDto plan;
     private List<AccumulatorDto> accumulators;
     private List<ClaimDto> claims;

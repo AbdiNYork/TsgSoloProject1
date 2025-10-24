@@ -87,6 +87,7 @@ public class ImplDashboardService implements DashboardService {
 
         DashboardDto dashboardDto = new DashboardDto();
         dashboardDto.setName(member.getFirstName());
+        dashboardDto.setEmail(email);
         dashboardDto.setPlan(planDto);
         dashboardDto.setAccumulators(accumulatorDtos);
         dashboardDto.setClaims(claimDtos);

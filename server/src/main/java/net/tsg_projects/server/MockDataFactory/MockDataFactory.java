@@ -193,8 +193,8 @@ public class MockDataFactory {
         Accumulator accumulator2 = new Accumulator();
         accumulator2.setType(AccumulatorType.OOP_MAX);
         accumulator2.setTier(NetworkTier.IN_NETWORK);
-        accumulator2.setLimitAmount(BigDecimal.valueOf(80));
-        accumulator2.setUsedAmount(BigDecimal.valueOf(1200));
+        accumulator2.setLimitAmount(BigDecimal.valueOf(1350));
+        accumulator2.setUsedAmount(BigDecimal.valueOf(120));
         accumulator2.setEnrollment(enrollment);
 
 
