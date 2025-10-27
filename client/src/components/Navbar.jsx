@@ -37,7 +37,7 @@ const Navbar = () => {
                         Claims
                     </Link>
                     <Link
-                        to="/claims/C-15342"
+                        to="/claims/C-13000"
                         className="text-gray-700 hover:bg-gray-100 px-4 py-2 rounded transition"
                     >
                         ClaimDetail

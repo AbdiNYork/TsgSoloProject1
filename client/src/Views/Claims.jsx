@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 export default function Claims() {
     // Filters
@@ -172,15 +173,21 @@ export default function Claims() {
                             <tr
                                 key={c.claimNumber}
                                 className="hover:bg-gray-50 cursor-pointer"
-                                onClick={() => alert(`Open claim ${c.claimNumber}`)}
                             >
+                                <Link
+                                    key={c.claimNumber}
+                                    to={`/claims/${c.claimNumber}`}
+                                    className="block p-4 border rounded hover:bg-gray-50"
+                                >
                                 <td className="border px-4 py-2">{c.claimNumber}</td>
+                                </Link>
                                 <td className="border px-4 py-2">
                                     {c.serviceStartDate} - {c.serviceEndDate}
                                 </td>
                                 <td className="border px-4 py-2">{c.providerName}</td>
                                 <td className="border px-4 py-2">{c.status}</td>
                                 <td className="border px-4 py-2">${c.memberResponsibility}</td>
+
                             </tr>
                         ))
                     )}
