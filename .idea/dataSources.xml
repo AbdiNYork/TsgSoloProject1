@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Soloproject1@localhost" uuid="236c19ea-fe85-4f03-aec2-5e8af663b6b6">
+    <data-source source="LOCAL" name="Soloproject1@localhost" uuid="ea45af81-e31a-4e3d-a0f6-362242de30d3">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <imported>true</imported>
-      <remarks>$PROJECT_DIR$/server/src/main/resources/application.properties</remarks>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/Soloproject1</jdbc-url>
       <jdbc-additional-properties>
