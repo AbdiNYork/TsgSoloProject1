@@ -31,8 +31,6 @@ The **Member Benefits Dashboard** provides members with a simple, secure, and mo
 ---
 
 ## 📱 Application Structure
-<prev>
-```
 project-root/
 ├── docker-compose.yml
 ├── README.md
@@ -61,8 +59,6 @@ project-root/
 │       │       └── templates/
 │       └── test/
 └── ...
-```
-</prev>
 
 
 ### 4 Core Screens
