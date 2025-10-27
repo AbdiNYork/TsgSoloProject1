@@ -1,9 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import {data, Link, useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserFromToken } from "../utils/auth.jsx";
+import {getMemberDash} from "../utils/dashboardApi.jsx";
 
 const Navbar = () => {
     const [user, setUser] = useState(null);
+    const [claims, setClaims] = useState('');
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -16,6 +18,7 @@ const Navbar = () => {
             console.log("Decoded user:", data);
             setUser(data);
         });
+        getMemberDash().then((data) => setClaims(data.claims))
     }, []);
 
     return (
@@ -36,12 +39,15 @@ const Navbar = () => {
                     >
                         Claims
                     </Link>
-                    <Link
-                        to="/claims/C-13000"
-                        className="text-gray-700 hover:bg-gray-100 px-4 py-2 rounded transition"
-                    >
-                        ClaimDetail
-                    </Link>
+                    {claims?.length > 0 &&
+
+                        <Link
+                            to={`/claims/${claims[0].claimNumber}`}
+                            className="text-gray-700 hover:bg-gray-100 px-4 py-2 rounded transition"
+                        >
+                            ClaimDetail
+                        </Link>
+                    }
                 </nav>
             </div>
 
