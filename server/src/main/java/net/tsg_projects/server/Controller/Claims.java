@@ -24,7 +24,7 @@ public class Claims {
 
 
     @GetMapping("")
-    public Page<ClaimSummaryDto> getClaims(@RequestParam(required = false) String claimNumber,
+    public Page<ClaimSummaryDto> getClaims(@RequestParam(required = true) String claimNumber,
                                            @RequestParam(required = false) String providerName,
                                            @RequestParam(required = false) List<ClaimStatus> statuses,
                                            @RequestParam(required = false) LocalDate startDate,

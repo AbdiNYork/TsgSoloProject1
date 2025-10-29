@@ -1,7 +1,12 @@
 package net.tsg_projects.server.Service;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Data;
-import net.tsg_projects.server.Controller.Dashboard;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
 import net.tsg_projects.server.Dto.*;
 import net.tsg_projects.server.Entity.Accumulator.Accumulator;
 import net.tsg_projects.server.Entity.Claim.Claim;
@@ -10,12 +15,6 @@ import net.tsg_projects.server.Entity.Member.Member;
 import net.tsg_projects.server.Entity.Plan.Plan;
 import net.tsg_projects.server.MockDataFactory.MockDataFactory;
 import net.tsg_projects.server.Repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Service
@@ -42,7 +41,23 @@ public class ImplDashboardService implements DashboardService {
 
     public DashboardDto dashboard(String email) {
         Member member = memberRepository.findByEmail(email);
-        Enrollment currentEnrollment = member.getEnrollments().get(0);
+
+
+        // Get the list of enrollments a member has
+        List<Enrollment> enrollments = member.getEnrollments();
+        // Instantiate our currentEnrollment object, leave this unassigned while we do validation step
+        Enrollment currentEnrollment;
+
+        // Check to see if the enrollments list is not empty
+        // If it's not empty we can grab the first enrollment
+        // Else call the createEnrollment method which returns a new enrollment for tied to member
+        if(!enrollments.isEmpty()){
+            currentEnrollment = enrollments.get(0);
+        } else {
+           currentEnrollment = mockDataFactory.createEnrollment(member);
+        }
+
+        // I can seperate out the dto mapping to a seperate class
         EnrollmentDto enrollmentDto = mockDataFactory.toDto(currentEnrollment);
 
 
